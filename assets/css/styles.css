@@ -1,12 +1,18 @@
 /* CUSTOM VARIABLES */
 :root{
-    --font-stack: Arial Black 
+    --primary-color: #351c78;
+    --secondary-color: #d9a4f1;
+    --font-stack: Arial Black, Arial, Verdana;
 }
 /* RESETS */
 body{
     margin: 0;
     border: 0;
     box-sizing: border-box;
+}
+/* UTILITY STYLES */
+.text-left{
+    text-align: left;
 }
 /* HEADER STYLES */
 .head-container{
@@ -16,7 +22,7 @@ body{
 }
 
 .high-score-link{
-    color: #d9a4f1;
+    color: var(--secondary-color);
     font-size: 1.6rem;
     font-family: var(--font-stack);
 }
@@ -51,7 +57,7 @@ body{
 
 .start-button{
     padding: 1rem;
-    background-color: #351c78;
+    background-color: var(--primary-color);
     color: white;
     font-family: var(--font-stack);
     font-size: 1rem;
@@ -60,6 +66,21 @@ body{
 }
 
 .start-button:hover{
-    background-color: #d9a4f1;
+    background-color: var(--secondary-color);
     cursor: pointer;
+}
+
+.btn{
+    padding: 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    font-family: var(--font-stack);
+    font-size: 1rem;
+    border-radius: 8%;
+    border: none;
+}
+
+.list-btns{
+list-style: none;
+text-align: left;
 }
