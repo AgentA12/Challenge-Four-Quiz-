@@ -1,6 +1,8 @@
+var mainContainerEl = document.querySelector(".main-container");
 var buttonContainerEl = document.querySelector(".button-container");
 var startQuizButtonEl = document.querySelector(".start-button");
 var ulButtonEl = document.createElement("ul");
+ulButtonEl.className = "ul-btns";
 var score = 75;
 var questionId = 0;
 var listOfBtns;
@@ -13,7 +15,7 @@ function startQuiz() {
   var myInterval = setInterval(() => {
     if (score <= 0) {
       clearInterval(myInterval);
-      alert("Darn! Times up!");
+      alert("Darn, Times up!");
     }
     displayedScoreCounter.textContent = score;
     score--;
@@ -22,10 +24,12 @@ function startQuiz() {
   //get the main title and add a class to align it to the left
   var mainTitleTextEl = document.querySelector(".main-title");
   mainTitleTextEl.classList.add("text-left");
+  mainTitleTextEl.textContent = "Commonly used data types DO not include:";
 
   //get the main text and align to the left
   var mainTextEl = document.querySelector(".main-text");
   mainTextEl.classList.add("text-left");
+  mainTextEl.remove();
 
   //remove the start button
   startQuizButtonEl.remove();
@@ -37,18 +41,20 @@ function startQuiz() {
   assignTextContent(listOfBtns);
 
   ulButtonEl.addEventListener("click", (event) => {
+    var trueOrFalse;
     var targetEl = event.target.getAttribute("data-bool");
-    console.log(targetEl);
-    if (targetEl == 'false') {
-      console.log("you clicked a false answer");
+    if (targetEl == "false") {
+      trueOrFalse = false;
+      createWrongText();
     } else {
-      console.log("you clicked a correct answer");
+      trueOrFalse = true;
+      createRightText();
     }
   });
 }
 
-//create four buttons
 function createBtns() {
+  //create four buttons and store in array
   var buttonArray = [];
   //create four buttons and assign a class and a unique data-id
   for (var i = 0; i < 4; i++) {
@@ -66,7 +72,6 @@ function createBtns() {
     liButtonEl.appendChild(questionButton);
   }
   return buttonArray;
-  questionId++;
 }
 
 function assignTextContent(arrayOfButtons) {
@@ -92,7 +97,21 @@ function assignTextContent(arrayOfButtons) {
       }
     }
   }
+  questionId++;
 }
 
+function createRightText(){
+  var rightDivEL = document.createElement("div");
+  rightDivEL.className = "wrong-div";
+  rightDivEL.textContent = "Correct!";
+  mainContainerEl.appendChild(rightDivEL);
+}
+
+function createWrongText(){
+  var wrongDivEL = document.createElement("div");
+  wrongDivEL.className = "wrong-div";
+  wrongDivEL.textContent = "Wrong!";
+  mainContainerEl.appendChild(wrongDivEL);
+}
 //get startQuiz button and on click call the startQuiz function
 startQuizButtonEl.addEventListener("click", startQuiz);
