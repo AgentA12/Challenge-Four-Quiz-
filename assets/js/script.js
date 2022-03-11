@@ -1,47 +1,98 @@
-var btnID = 0;
-var buttonContainer = document.querySelector(".button-container");
+var buttonContainerEl = document.querySelector(".button-container");
+var startQuizButtonEl = document.querySelector(".start-button");
+var ulButtonEl = document.createElement("ul");
+var score = 75;
+var questionId = 0;
+var listOfBtns;
 
 function startQuiz() {
-  //get the main title and add a class to align it to the left and change the text
+  //get the counter element
+  var displayedScoreCounter = document.getElementById("timed-score-value");
+
+  //set the counter to decrease every second
+  var myInterval = setInterval(() => {
+    if (score <= 0) {
+      clearInterval(myInterval);
+      alert("Darn! Times up!");
+    }
+    displayedScoreCounter.textContent = score;
+    score--;
+  }, 1000);
+
+  //get the main title and add a class to align it to the left
   var mainTitleTextEl = document.querySelector(".main-title");
   mainTitleTextEl.classList.add("text-left");
-  mainTitleTextEl.textContent = "Commonly used data types do not include:";
 
-  //get the main text and its container and remove it
+  //get the main text and align to the left
   var mainTextEl = document.querySelector(".main-text");
-  var titleContainerEl = document.querySelector(".main-container");
-  titleContainerEl.removeChild(mainTextEl);
+  mainTextEl.classList.add("text-left");
 
-  //get the start quiz button and remove it, then add four new buttons for the first answer
-  var startQuizButtonEl = document.querySelector(".start-button");
-  buttonContainer.removeChild(startQuizButtonEl);
+  //remove the start button
+  startQuizButtonEl.remove();
 
-  //call function to create four buttons
-  createBtns1();
+  //call function to create four buttons and store them in a  variable array
+  listOfBtns = createBtns();
+
+  //change the text content in the four buttons
+  assignTextContent(listOfBtns);
+
+  ulButtonEl.addEventListener("click", (event) => {
+    var targetEl = event.target.getAttribute("data-bool");
+    console.log(targetEl);
+    if (targetEl == 'false') {
+      console.log("you clicked a false answer");
+    } else {
+      console.log("you clicked a correct answer");
+    }
+  });
 }
 
-function createBtns1() {
+//create four buttons
+function createBtns() {
+  var buttonArray = [];
+  //create four buttons and assign a class and a unique data-id
   for (var i = 0; i < 4; i++) {
-    var ulButtonEl = document.createElement("ul");
     var liButtonEl = document.createElement("li");
     liButtonEl.className = "list-btns";
     var questionButton = document.createElement("button");
-    questionButton.classList.add("btn");
-    questionButton.setAttribute("data-id", i)
+    questionButton.classList.add("quiz-btn");
+    questionButton.setAttribute("data-id", i);
+    questionButton.setAttribute("question-id", questionId);
+    buttonArray.push(questionButton);
 
-    buttonContainer.appendChild(ulButtonEl);
-    liButtonEl.appendChild(questionButton);
+    //append buttons to li and li to ul and ul to container div
+    buttonContainerEl.appendChild(ulButtonEl);
     ulButtonEl.appendChild(liButtonEl);
-
-    //send current button to assigntext function to give textcontent
-    assigntext(questionButton);
+    liButtonEl.appendChild(questionButton);
   }
-  
+  return buttonArray;
+  questionId++;
 }
 
-function assigntext(btn){
-    
+function assignTextContent(arrayOfButtons) {
+  // use question id to identify correct set of questions then assign correct text and give the wrong answer a data-bool of false
+  if (questionId == 0) {
+    for (i = 0; i < arrayOfButtons.length; i++) {
+      var dataIdAttribute = arrayOfButtons[i].getAttribute("data-id");
+
+      switch (dataIdAttribute) {
+        case "0":
+          arrayOfButtons[i].textContent = "1: strings";
+          break;
+        case "1":
+          arrayOfButtons[i].textContent = "2: booleans";
+          break;
+        case "2":
+          arrayOfButtons[i].textContent = "3: alert";
+          arrayOfButtons[i].setAttribute("data-bool", false);
+          break;
+        case "3":
+          arrayOfButtons[i].textContent = "4: numbers";
+          break;
+      }
+    }
+  }
 }
+
 //get startQuiz button and on click call the startQuiz function
-var startQuizButtonEl = document.querySelector(".start-button");
 startQuizButtonEl.addEventListener("click", startQuiz);
