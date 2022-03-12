@@ -72,36 +72,43 @@ function assignTextContent(arrayOfButtons) {
       switch (dataIdAttribute) {
         case "0":
           arrayOfButtons[i].textContent = "1: strings";
+          arrayOfButtons[i].setAttribute("data-bool", false);
           break;
         case "1":
           arrayOfButtons[i].textContent = "2: booleans";
+          arrayOfButtons[i].setAttribute("data-bool", false);
           break;
         case "2":
           arrayOfButtons[i].textContent = "3: alert";
-          arrayOfButtons[i].setAttribute("data-bool", false);
+          arrayOfButtons[i].setAttribute("data-bool", true);
           break;
         case "3":
           arrayOfButtons[i].textContent = "4: numbers";
+          arrayOfButtons[i].setAttribute("data-bool", false);
           break;
       }
     }
   } else if (questionId == 1) {
-    mainTitleTextEl.textContent = "The condition in an if/else statement id enclosed with _________.";
+    mainTitleTextEl.textContent = "The condition in an if/else statement is enclosed with _________.";
     for (i = 0; i < arrayOfButtons.length; i++) {
       var dataIdAttribute = arrayOfButtons[i].getAttribute("data-id");
 
       switch (dataIdAttribute) {
         case "0":
           arrayOfButtons[i].textContent = "1: quotes";
+          arrayOfButtons[i].setAttribute("data-bool", false);
           break;
         case "1":
           arrayOfButtons[i].textContent = "2: curly brackets";
+          arrayOfButtons[i].setAttribute("data-bool", false);
           break;
         case "2":
           arrayOfButtons[i].textContent = "3: parenthesis";
+          arrayOfButtons[i].setAttribute("data-bool", true);
           break;
         case "3":
           arrayOfButtons[i].textContent = "4: square brackets";
+          arrayOfButtons[i].setAttribute("data-bool", false);
           break;
       }
     }
@@ -113,15 +120,19 @@ function assignTextContent(arrayOfButtons) {
       switch (dataIdAttribute) {
         case "0":
           arrayOfButtons[i].textContent = "1: numbers and strings";
+          arrayOfButtons[i].setAttribute("data-bool", false);
           break;
         case "1":
           arrayOfButtons[i].textContent = "2: other arrays";
+          arrayOfButtons[i].setAttribute("data-bool", false);
           break;
         case "2":
           arrayOfButtons[i].textContent = "3: booleans";
+          arrayOfButtons[i].setAttribute("data-bool", false);
           break;
         case "3":
           arrayOfButtons[i].textContent = "4: all of the above";
+          arrayOfButtons[i].setAttribute("data-bool", true);
           break;
       }
     }
@@ -133,15 +144,19 @@ function assignTextContent(arrayOfButtons) {
       switch (dataIdAttribute) {
         case "0":
           arrayOfButtons[i].textContent = "1: commas";
+          arrayOfButtons[i].setAttribute("data-bool", false);
           break;
         case "1":
           arrayOfButtons[i].textContent = "2: curly brackets";
+          arrayOfButtons[i].setAttribute("data-bool", false);
           break;
         case "2":
           arrayOfButtons[i].textContent = "3: quotes";
+          arrayOfButtons[i].setAttribute("data-bool", true);
           break;
         case "3":
           arrayOfButtons[i].textContent = "4: parenthesis";
+          arrayOfButtons[i].setAttribute("data-bool", false);
           break;
       }
     }
@@ -153,15 +168,19 @@ function assignTextContent(arrayOfButtons) {
       switch (dataIdAttribute) {
         case "0":
           arrayOfButtons[i].textContent = "1: javascript";
+          arrayOfButtons[i].setAttribute("data-bool", false);
           break;
         case "1":
           arrayOfButtons[i].textContent = "2: terminal/bash";
+          arrayOfButtons[i].setAttribute("data-bool", false);
           break;
         case "2":
           arrayOfButtons[i].textContent = "3: for loops";
+          arrayOfButtons[i].setAttribute("data-bool", false);
           break;
         case "3":
           arrayOfButtons[i].textContent = "4: console.log";
+          arrayOfButtons[i].setAttribute("data-bool", true);
           break;
       }
     }
@@ -197,7 +216,9 @@ function removeElements() {
   }
 }
 
-function createTitle() {}
+function getFinalScore(){
+  mainContainerEl.remove();
+}
 
 //get startQuiz button and on click call the startQuiz function
 startQuizButtonEl.addEventListener("click", startQuiz);
@@ -205,11 +226,14 @@ startQuizButtonEl.addEventListener("click", startQuiz);
 //add event listener on all four buttnons
 ulButtonEl.addEventListener("click", (event) => {
   //get the true or false value from the target of event
+  if(questionId == 5){
+    getFinalScore()
+  }
   var targetEl = event.target.getAttribute("data-bool");
   if (targetEl == "false") {
     createWrongText();
     score = score - 12;
-  } else {
+  } else if(targetEl == "true"){
     createRightText();
   }
   removeElements();
