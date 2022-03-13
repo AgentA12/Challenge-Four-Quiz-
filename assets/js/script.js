@@ -16,7 +16,8 @@ function startQuiz() {
     if (score <= 0) {
       clearInterval(myInterval);
       alert("Darn, Times up!");
-    }else if(questionId == 5){
+      //getFinalScore();
+    } else if (questionId == 6) {
       clearInterval(myInterval);
     }
     displayedScoreCounter.textContent = score;
@@ -91,7 +92,8 @@ function assignTextContent(arrayOfButtons) {
       }
     }
   } else if (questionId == 1) {
-    mainTitleTextEl.textContent = "The condition in an if/else statement is enclosed with _________.";
+    mainTitleTextEl.textContent =
+      "The condition in an if/else statement is enclosed with _________.";
     for (i = 0; i < arrayOfButtons.length; i++) {
       var dataIdAttribute = arrayOfButtons[i].getAttribute("data-id");
 
@@ -115,7 +117,8 @@ function assignTextContent(arrayOfButtons) {
       }
     }
   } else if (questionId == 2) {
-    mainTitleTextEl.textContent = "Arrays in Javascript can be used to store _________.";
+    mainTitleTextEl.textContent =
+      "Arrays in Javascript can be used to store _________.";
     for (i = 0; i < arrayOfButtons.length; i++) {
       var dataIdAttribute = arrayOfButtons[i].getAttribute("data-id");
 
@@ -139,7 +142,8 @@ function assignTextContent(arrayOfButtons) {
       }
     }
   } else if (questionId == 3) {
-    mainTitleTextEl.textContent = "String values must be enclosed within _________ when being assigned to variables.";
+    mainTitleTextEl.textContent =
+      "String values must be enclosed within _________ when being assigned to variables.";
     for (i = 0; i < arrayOfButtons.length; i++) {
       var dataIdAttribute = arrayOfButtons[i].getAttribute("data-id");
 
@@ -163,7 +167,8 @@ function assignTextContent(arrayOfButtons) {
       }
     }
   } else if (questionId == 4) {
-    mainTitleTextEl.textContent = "A very useful tool used during development and debugging for printing content to the debugger is:";
+    mainTitleTextEl.textContent =
+      "A very useful tool used during development and debugging for printing content to the debugger is:";
     for (i = 0; i < arrayOfButtons.length; i++) {
       var dataIdAttribute = arrayOfButtons[i].getAttribute("data-id");
 
@@ -218,26 +223,38 @@ function removeElements() {
   }
 }
 
-function getFinalScore(){
- // create elements for input form div
- mainContainerEl.textContent = "All done!";
- var finalScoreTextEl = document.createElement("p");
- finalScoreTextEl.className = "text-left";
- finalScoreTextEl.textContent = `Your final score was ${score}.`;
- var inputLabelEl = document.createElement("label");
- inputLabelEl.textContent = "Enter Initials: ";
- inputLabelEl.className = "text-left";
- var inputField = document.createElement("input");
- var submitBtnEl = document.createElement("button");
- submitBtnEl.textContent = "Submit";
- submitBtnEl.className = "quiz-btn";
+function getFinalScore() {
+  // create elements for input form div
+  mainContainerEl.textContent = "";
+  const setScore = score;
+  console.log(setScore);
+  var formTitleEl = document.createElement("h2");
+  formTitleEl.textContent = "All Done!";
+  formTitleEl.className = "main-title";
+  mainContainerEl.appendChild(formTitleEl);
 
- //append the elements to container
- mainContainerEl.appendChild(finalScoreTextEl);
- mainContainerEl.appendChild(inputLabelEl);
- mainContainerEl.appendChild(inputField);
- mainContainerEl.appendChild(submitBtnEl);
+  var finalScoreTextEl = document.createElement("p");
+  finalScoreTextEl.classList.add("text-left");
+  finalScoreTextEl.classList.add("main-text");
+  finalScoreTextEl.textContent = `Your final score was ${setScore}.`;
+  mainContainerEl.appendChild(finalScoreTextEl);
 
+  //  var inputLabelEl = document.createElement("label");
+  //  inputLabelEl.textContent = "Enter Initials: ";
+  //  inputLabelEl.classList.add("text-left");
+  //  inputLabelEl.classList.add("form-label");
+
+  // var inputField = document.createElement("input");
+
+  // var submitBtnEl = document.createElement("button");
+  // submitBtnEl.textContent = "Submit";
+  // submitBtnEl.className = "quiz-btn";
+
+  // //append the elements to container
+
+  // mainContainerEl.appendChild(inputLabelEl);
+  // mainContainerEl.appendChild(inputField);
+  // mainContainerEl.appendChild(submitBtnEl);
 }
 
 //get startQuiz button and on click call the startQuiz function
@@ -246,15 +263,15 @@ startQuizButtonEl.addEventListener("click", startQuiz);
 //add event listener on all four buttnons
 ulButtonEl.addEventListener("click", (event) => {
   //get the true or false value from the target of event
-  if(questionId == 5){
-    getFinalScore()
-  }
   var targetEl = event.target.getAttribute("data-bool");
   if (targetEl == "false") {
     createWrongText();
     score = score - 12;
-  } else if(targetEl == "true"){
+  } else if (targetEl == "true") {
     createRightText();
+  }
+  if (questionId == 5) {
+    getFinalScore();
   }
   removeElements();
   createBtns();
