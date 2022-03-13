@@ -11,11 +11,13 @@ function startQuiz() {
   //get the counter element
   var displayedScoreCounter = document.getElementById("timed-score-value");
 
-  //set the counter to decrease every second
+  //set the counter to decrease every second. if score is 0 or last question is answered stop quiz and clear
   var myInterval = setInterval(() => {
     if (score <= 0) {
       clearInterval(myInterval);
       alert("Darn, Times up!");
+    }else if(questionId == 5){
+      clearInterval(myInterval);
     }
     displayedScoreCounter.textContent = score;
     score--;
@@ -217,7 +219,25 @@ function removeElements() {
 }
 
 function getFinalScore(){
-  mainContainerEl.remove();
+ // create elements for input form div
+ mainContainerEl.textContent = "All done!";
+ var finalScoreTextEl = document.createElement("p");
+ finalScoreTextEl.className = "text-left";
+ finalScoreTextEl.textContent = `Your final score was ${score}.`;
+ var inputLabelEl = document.createElement("label");
+ inputLabelEl.textContent = "Enter Initials: ";
+ inputLabelEl.className = "text-left";
+ var inputField = document.createElement("input");
+ var submitBtnEl = document.createElement("button");
+ submitBtnEl.textContent = "Submit";
+ submitBtnEl.className = "quiz-btn";
+
+ //append the elements to container
+ mainContainerEl.appendChild(finalScoreTextEl);
+ mainContainerEl.appendChild(inputLabelEl);
+ mainContainerEl.appendChild(inputField);
+ mainContainerEl.appendChild(submitBtnEl);
+
 }
 
 //get startQuiz button and on click call the startQuiz function
