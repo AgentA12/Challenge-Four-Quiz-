@@ -148,4 +148,12 @@ body {
 
 .score-list {
   background-color: #7d6da8;
+  font-size: 1.8rem;
+  text-align: left;
+}
+
+.final-buttons{
+  width: fit-content;
+  display: inline-block;
+  margin-left: 8px;
 }

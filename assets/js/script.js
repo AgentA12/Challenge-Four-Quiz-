@@ -231,21 +231,26 @@ function displayFormPage() {
   mainContainerEl.textContent = "";
   const setScore = score;
 
+  //create form element and add textcontent and class then append to container
   var formTitleEl = document.createElement("h2");
   formTitleEl.textContent = "All Done!";
   formTitleEl.className = "main-title";
+  formTitleEl.classList.add("text-left");
   mainContainerEl.appendChild(formTitleEl);
 
+  //create final score text and append to main container
   var finalScoreTextEl = document.createElement("p");
   finalScoreTextEl.classList.add("text-left");
   finalScoreTextEl.classList.add("main-text");
   finalScoreTextEl.textContent = `Your final score was ${setScore}.`;
   mainContainerEl.appendChild(finalScoreTextEl);
 
+  //create form
   var formContainer = document.createElement("form");
   formContainer.className = "form-container";
   mainContainerEl.appendChild(formContainer);
 
+  //create form input label and give it classes and an attribute and apppend
   var inputLabelEl = document.createElement("label");
   inputLabelEl.textContent = "Enter Initials: ";
   inputLabelEl.classList.add("text-left");
@@ -253,39 +258,86 @@ function displayFormPage() {
   inputLabelEl.setAttribute("name", "initials-form");
   formContainer.appendChild(inputLabelEl);
 
+  //create form input and give it classes and an attribute and append
   var inputField = document.createElement("input");
   inputField.setAttribute("name", "initials-form");
   inputField.classList.add("score-input");
   formContainer.appendChild(inputField);
 
+  //create submit button
   submitBtnEl.textContent = "Submit";
   submitBtnEl.setAttribute("name", "initials-form");
   submitBtnEl.className = "submit-button";
   formContainer.appendChild(submitBtnEl);
 
+  //add an event listener on the form
   formContainer.addEventListener("submit", (event) => {
     event.preventDefault();
     //save current score and initials to array of objects
     var initialsData = inputField.value;
+
+    //check to see if input field is empty
     if (!initialsData) {
       alert("you need to fill out the form");
       return false;
     }
-
+    //make new object and give it current data
     var objectData = {
       initials: initialsData,
       score: setScore,
     };
 
+    //push current object to array of data
     scoreDataArray.push(objectData);
     console.log(scoreDataArray);
+
+    //save the array to local storage
     saveScores();
-    
+
+    //display the list of scores
+    displayScorePage();
   });
 }
 
-function saveScores(){
+function saveScores() {
   localStorage.setItem("users", JSON.stringify(scoreDataArray));
+}
+
+function displayScorePage() {
+  //remove elements and display correct scorePage elements
+  document.querySelector("header").remove();
+  document.querySelector("h2").textContent = "High Scores";
+  document.querySelector("p").remove();
+  document.querySelector("form").remove();
+
+  //create scorelist to hold recent scores
+  var listOfScores = document.createElement("ol");
+  listOfScores.className = "score-list";
+  mainContainerEl.appendChild(listOfScores);
+
+  //create list item
+  var scoreListItem = document.createElement("li");
+  scoreListItem.textContent = "hello";
+  listOfScores.appendChild(scoreListItem);
+
+  //conatiner for buttons
+  var buttonContainer2 = document.createElement("div");
+  buttonContainer2.className = "form-container";
+  mainContainerEl.appendChild(buttonContainer2);
+
+  //create buttons
+  var goBackBtn = document.createElement("button");
+  goBackBtn.className = "submit-button";
+  goBackBtn.classList.add("go-back")
+  goBackBtn.textContent = "Go back";
+  goBackBtn.classList.add("final-buttons");
+  buttonContainer2.appendChild(goBackBtn);
+
+  var clearHighScores = document.createElement("button");
+  clearHighScores.className = "submit-button";
+  clearHighScores.classList.add("final-buttons");
+  clearHighScores.textContent = "Clear high scores";
+  buttonContainer2.appendChild(clearHighScores);
 }
 
 //get startQuiz button and on click call the startQuiz function
@@ -294,17 +346,32 @@ startQuizButtonEl.addEventListener("click", startQuiz);
 //add event listener on all four buttnons
 ulButtonEl.addEventListener("click", (event) => {
   //get the true or false value from the target of event
-  var targetEl = event.target.getAttribute("data-bool");
-  if (targetEl == "false") {
-    createWrongText();
-    score = score - 12;
-  } else if (targetEl == "true") {
-    createRightText();
+  if (event.target.className == "quiz-btn") {
+    var targetEl = event.target.getAttribute("data-bool");
+    if (targetEl == "false") {
+      createWrongText();
+      score = score - 12;
+    } else if (targetEl == "true") {
+      createRightText();
+    }
+    if (questionId == 5) {
+      displayFormPage();
+    }
+    removeElements();
+    createBtns();
+    //createTitle();
   }
-  if (questionId == 5) {
-    displayFormPage();
-  }
-  removeElements();
-  createBtns();
-  //createTitle();
 });
+
+
+var viewHighScores = document.querySelector(".high-score-link");
+viewHighScores.addEventListener("click", () => {
+ 
+})
+
+
+var Goback = document.querySelector("button[class=go-back]");
+console.log(Goback);
+Goback.addEventListener("click", function (){
+  location.reload();
+})
