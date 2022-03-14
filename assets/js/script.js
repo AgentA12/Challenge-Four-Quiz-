@@ -289,7 +289,6 @@ function displayFormPage() {
 
     //push current object to array of data
     scoreDataArray.push(objectData);
-    console.log(scoreDataArray);
 
     //save the array to local storage
     saveScores();
@@ -307,18 +306,17 @@ function displayScorePage() {
   //remove elements and display correct scorePage elements
   document.querySelector("header").remove();
   document.querySelector("h2").textContent = "High Scores";
+  if(document.querySelector("p") && document.querySelector("form")){
   document.querySelector("p").remove();
   document.querySelector("form").remove();
-
+}
   //create scorelist to hold recent scores
   var listOfScores = document.createElement("ol");
   listOfScores.className = "score-list";
   mainContainerEl.appendChild(listOfScores);
 
-  //create list item
-  var scoreListItem = document.createElement("li");
-  scoreListItem.textContent = "hello";
-  listOfScores.appendChild(scoreListItem);
+  //get local storage and display as list
+  getLocalStorage(listOfScores);
 
   //conatiner for buttons
   var buttonContainer2 = document.createElement("div");
@@ -328,16 +326,44 @@ function displayScorePage() {
   //create buttons
   var goBackBtn = document.createElement("button");
   goBackBtn.className = "submit-button";
-  goBackBtn.classList.add("go-back")
   goBackBtn.textContent = "Go back";
   goBackBtn.classList.add("final-buttons");
   buttonContainer2.appendChild(goBackBtn);
 
+  goBackBtn.addEventListener("click", function(){
+    location.reload();
+  })
   var clearHighScores = document.createElement("button");
   clearHighScores.className = "submit-button";
   clearHighScores.classList.add("final-buttons");
   clearHighScores.textContent = "Clear high scores";
   buttonContainer2.appendChild(clearHighScores);
+
+  clearHighScores.addEventListener('click', function () {
+    localStorage.clear();
+    listOfScores.remove();
+  });
+}
+
+function getLocalStorage(list) {
+  var storedScores = localStorage.getItem("users");
+
+  // if there are no tasks, set tasks to an empty array and return out of the function
+  if (!storedScores) {
+    return false;
+  }
+  // parse into array of objects
+  storedScores = JSON.parse(storedScores);
+  console.log(storedScores);
+
+  // loop through storedScores array
+  for (var i = 0; i < storedScores.length; i++) {
+    //create list item
+    var scoreListItem = document.createElement("li");
+    scoreListItem.textContent =
+    storedScores[i].initials + "  score: " + storedScores[i].score;
+    list.appendChild(scoreListItem);
+  }
 }
 
 //get startQuiz button and on click call the startQuiz function
@@ -359,19 +385,12 @@ ulButtonEl.addEventListener("click", (event) => {
     }
     removeElements();
     createBtns();
-    //createTitle();
   }
 });
 
-
-var viewHighScores = document.querySelector(".high-score-link");
-viewHighScores.addEventListener("click", () => {
- 
-})
-
-
-var Goback = document.querySelector("button[class=go-back]");
-console.log(Goback);
-Goback.addEventListener("click", function (){
-  location.reload();
-})
+var highScoreLink = document.querySelector(".high-score-link");
+highScoreLink.addEventListener("click", function () {
+  document.querySelector("p").remove();
+  startQuizButtonEl.remove();
+  displayScorePage();
+});
