@@ -107,3 +107,45 @@ body {
   color: lightgrey;
   font-size: 3rem;
 }
+
+.inline-display {
+  display: inline-block;
+}
+
+.score-input {
+  width: 40%;
+  margin-left: 8px;
+  font-size: 1.2rem;
+  padding-left: 0.5rem;
+}
+
+.score-input:focus {
+  border: 3px solid #add8e6;
+  outline: #add8e6;
+  border-radius: 5px;
+}
+
+.form-container {
+  display: flex;
+}
+
+.submit-button {
+  margin-left: 8px;
+  padding: 0.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  font-family: var(--font-stack);
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px var(--primary-color) solid;
+}
+
+.submit-button:hover {
+  cursor: pointer;
+  background-color: var(--secondary-color);
+  border: 1px var(--secondary-color) solid;
+}
+
+.score-list {
+  background-color: #7d6da8;
+}

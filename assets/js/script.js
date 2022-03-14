@@ -1,11 +1,14 @@
 var mainContainerEl = document.querySelector(".main-container");
 var buttonContainerEl = document.querySelector(".button-container");
 var startQuizButtonEl = document.querySelector(".start-button");
+var submitBtnEl = document.createElement("button");
 var ulButtonEl = document.createElement("ul");
-ulButtonEl.className = "ul-btns";
 var score = 75;
 var questionId = 0;
 var listOfBtns;
+var scoreDataArray = [];
+var objectId = 0;
+ulButtonEl.className = "ul-btns";
 
 function startQuiz() {
   //get the counter element
@@ -16,7 +19,7 @@ function startQuiz() {
     if (score <= 0) {
       clearInterval(myInterval);
       alert("Darn, Times up!");
-      //getFinalScore();
+      displayFormPage();
     } else if (questionId == 6) {
       clearInterval(myInterval);
     }
@@ -202,7 +205,7 @@ function createRightText() {
   mainContainerEl.appendChild(rightDivEL);
   setTimeout(() => {
     rightDivEL.remove();
-  }, 1000);
+  }, 1500);
 }
 
 function createWrongText() {
@@ -212,7 +215,7 @@ function createWrongText() {
   mainContainerEl.appendChild(wrongDivEL);
   setTimeout(() => {
     wrongDivEL.remove();
-  }, 1000);
+  }, 1500);
 }
 
 function removeElements() {
@@ -223,11 +226,11 @@ function removeElements() {
   }
 }
 
-function getFinalScore() {
-  // create elements for input form div
+function displayFormPage() {
+  // create elements for input form and append to form container
   mainContainerEl.textContent = "";
   const setScore = score;
-  console.log(setScore);
+
   var formTitleEl = document.createElement("h2");
   formTitleEl.textContent = "All Done!";
   formTitleEl.className = "main-title";
@@ -239,22 +242,50 @@ function getFinalScore() {
   finalScoreTextEl.textContent = `Your final score was ${setScore}.`;
   mainContainerEl.appendChild(finalScoreTextEl);
 
-  //  var inputLabelEl = document.createElement("label");
-  //  inputLabelEl.textContent = "Enter Initials: ";
-  //  inputLabelEl.classList.add("text-left");
-  //  inputLabelEl.classList.add("form-label");
+  var formContainer = document.createElement("form");
+  formContainer.className = "form-container";
+  mainContainerEl.appendChild(formContainer);
 
-  // var inputField = document.createElement("input");
+  var inputLabelEl = document.createElement("label");
+  inputLabelEl.textContent = "Enter Initials: ";
+  inputLabelEl.classList.add("text-left");
+  inputLabelEl.classList.add("main-text");
+  inputLabelEl.setAttribute("name", "initials-form");
+  formContainer.appendChild(inputLabelEl);
 
-  // var submitBtnEl = document.createElement("button");
-  // submitBtnEl.textContent = "Submit";
-  // submitBtnEl.className = "quiz-btn";
+  var inputField = document.createElement("input");
+  inputField.setAttribute("name", "initials-form");
+  inputField.classList.add("score-input");
+  formContainer.appendChild(inputField);
 
-  // //append the elements to container
+  submitBtnEl.textContent = "Submit";
+  submitBtnEl.setAttribute("name", "initials-form");
+  submitBtnEl.className = "submit-button";
+  formContainer.appendChild(submitBtnEl);
 
-  // mainContainerEl.appendChild(inputLabelEl);
-  // mainContainerEl.appendChild(inputField);
-  // mainContainerEl.appendChild(submitBtnEl);
+  formContainer.addEventListener("submit", (event) => {
+    event.preventDefault();
+    //save current score and initials to array of objects
+    var initialsData = inputField.value;
+    if (!initialsData) {
+      alert("you need to fill out the form");
+      return false;
+    }
+
+    var objectData = {
+      initials: initialsData,
+      score: setScore,
+    };
+
+    scoreDataArray.push(objectData);
+    console.log(scoreDataArray);
+    saveScores();
+    
+  });
+}
+
+function saveScores(){
+  localStorage.setItem("users", JSON.stringify(scoreDataArray));
 }
 
 //get startQuiz button and on click call the startQuiz function
@@ -271,9 +302,9 @@ ulButtonEl.addEventListener("click", (event) => {
     createRightText();
   }
   if (questionId == 5) {
-    getFinalScore();
+    displayFormPage();
   }
   removeElements();
   createBtns();
-  createTitle();
+  //createTitle();
 });
