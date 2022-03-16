@@ -3,7 +3,8 @@ var buttonContainerEl = document.querySelector(".button-container");
 var startQuizButtonEl = document.querySelector(".start-button");
 var submitBtnEl = document.createElement("button");
 var ulButtonEl = document.createElement("ul");
-var score = 75;
+var formContainer = document.createElement("form");
+var score = 5;
 var questionId = 0;
 var listOfBtns;
 var scoreDataArray = [];
@@ -18,7 +19,7 @@ function startQuiz() {
   //set the counter to decrease every second. if score is 0 or last question is answered stop quiz and clear
   var myInterval = setInterval(() => {
     if (score <= 0) {
-      if(score < 0){
+      if (score < 0) {
         score = 0;
       }
       clearInterval(myInterval);
@@ -209,8 +210,8 @@ function createRightText() {
   mainContainerEl.appendChild(rightDivEL);
 
   setTimeout(() => {
-  rightDivEL.remove();
-   }, 1000);
+    rightDivEL.remove();
+  }, 1000);
 }
 
 function createWrongText() {
@@ -220,7 +221,7 @@ function createWrongText() {
   mainContainerEl.appendChild(wrongDivEL);
 
   setTimeout(() => {
-   wrongDivEL.remove();
+    wrongDivEL.remove();
   }, 1000);
 }
 
@@ -232,10 +233,15 @@ function removeElements() {
   }
 }
 
-function displayFormPage() {
+function displayFormPage(id) {
   // create elements for input form and append to form container
   mainContainerEl.textContent = "";
-  if(score < 0){
+  //check if is false and - 12 from score
+  if (id == "false") {
+    score = score - 12;
+  }
+
+  if (score < 0) {
     score = 0;
   }
   const setScore = score;
@@ -255,7 +261,6 @@ function displayFormPage() {
   mainContainerEl.appendChild(finalScoreTextEl);
 
   //create form
-  var formContainer = document.createElement("form");
   formContainer.className = "form-container";
   mainContainerEl.appendChild(formContainer);
 
@@ -279,6 +284,12 @@ function displayFormPage() {
   submitBtnEl.className = "submit-button";
   formContainer.appendChild(submitBtnEl);
 
+  if (id == "false") {
+    createWrongText();
+  } else if (id == "true") {
+    createRightText();
+  }
+
   //add an event listener on the form
   formContainer.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -293,14 +304,12 @@ function displayFormPage() {
     //make new object and give it current data
     var objectData = {
       initials: initialsData,
-      score: setScore
+      score: setScore,
     };
-    
-   
+
     //save the array to local storage
     saveScores(objectData);
 
-    
     //display the list of scores
     displayScorePage();
   });
@@ -309,11 +318,11 @@ function displayFormPage() {
 function saveScores(data) {
   //NOTE: setItem will overwrite local storage! follow below to add a new object to an array in local storage
   //get the local storage and store it in a variable
-  var existingItems = JSON.parse(localStorage.getItem("users"))
+  var existingItems = JSON.parse(localStorage.getItem("users"));
   //check if its empty, if it is then create a new empty array
-  if (existingItems === null) existingItems= [];
-  //add "data" aka object data to the array 
-  existingItems.push(data)
+  if (existingItems === null) existingItems = [];
+  //add "data" aka object data to the array
+  existingItems.push(data);
   //set it in local storage
   localStorage.setItem("users", JSON.stringify(existingItems));
 }
@@ -349,6 +358,7 @@ function displayScorePage() {
   goBackBtn.addEventListener("click", function () {
     location.reload();
   });
+
   var clearHighScores = document.createElement("button");
   clearHighScores.className = "submit-button";
   clearHighScores.classList.add("final-buttons");
@@ -390,15 +400,13 @@ ulButtonEl.addEventListener("click", (event) => {
   //get the true or false value from the target of event
   if (event.target.className == "quiz-btn") {
     var targetEl = event.target.getAttribute("data-bool");
-    if (targetEl == "false") {
+    if (questionId == 5) {
+      displayFormPage(targetEl);
+    } else if (targetEl == "false") {
       createWrongText();
       score = score - 12;
     } else if (targetEl == "true") {
       createRightText();
-    }
-
-    if (questionId == 5) {
-      displayFormPage();
     }
     removeElements();
     createBtns();
