@@ -9,6 +9,7 @@ var listOfBtns;
 var scoreDataArray = [];
 var objectId = 0;
 ulButtonEl.className = "ul-btns";
+var TEXT;
 
 function startQuiz() {
   //get the counter element
@@ -17,6 +18,9 @@ function startQuiz() {
   //set the counter to decrease every second. if score is 0 or last question is answered stop quiz and clear
   var myInterval = setInterval(() => {
     if (score <= 0) {
+      if(score < 0){
+        score = 0;
+      }
       clearInterval(myInterval);
       alert("Darn, Times up!");
       displayFormPage();
@@ -203,9 +207,10 @@ function createRightText() {
   rightDivEL.className = "wrong-or-right";
   rightDivEL.textContent = "Correct!";
   mainContainerEl.appendChild(rightDivEL);
+
   setTimeout(() => {
-    rightDivEL.remove();
-  }, 1500);
+  rightDivEL.remove();
+   }, 1000);
 }
 
 function createWrongText() {
@@ -213,9 +218,10 @@ function createWrongText() {
   wrongDivEL.className = "wrong-or-right";
   wrongDivEL.textContent = "Wrong!";
   mainContainerEl.appendChild(wrongDivEL);
+
   setTimeout(() => {
-    wrongDivEL.remove();
-  }, 1500);
+   wrongDivEL.remove();
+  }, 1000);
 }
 
 function removeElements() {
@@ -229,6 +235,9 @@ function removeElements() {
 function displayFormPage() {
   // create elements for input form and append to form container
   mainContainerEl.textContent = "";
+  if(score < 0){
+    score = 0;
+  }
   const setScore = score;
 
   //create form element and add textcontent and class then append to container
@@ -284,32 +293,39 @@ function displayFormPage() {
     //make new object and give it current data
     var objectData = {
       initials: initialsData,
-      score: setScore,
+      score: setScore
     };
-
-    //push current object to array of data
-    scoreDataArray.push(objectData);
-
+    
+   
     //save the array to local storage
-    saveScores();
+    saveScores(objectData);
 
+    
     //display the list of scores
     displayScorePage();
   });
 }
 
-function saveScores() {
-  localStorage.setItem("users", JSON.stringify(scoreDataArray));
+function saveScores(data) {
+  //NOTE: setItem will overwrite local storage! follow below to add a new object to an array in local storage
+  //get the local storage and store it in a variable
+  var existingItems = JSON.parse(localStorage.getItem("users"))
+  //check if its empty, if it is then create a new empty array
+  if (existingItems === null) existingItems= [];
+  //add "data" aka object data to the array 
+  existingItems.push(data)
+  //set it in local storage
+  localStorage.setItem("users", JSON.stringify(existingItems));
 }
 
 function displayScorePage() {
   //remove elements and display correct scorePage elements
   document.querySelector("header").remove();
   document.querySelector("h2").textContent = "High Scores";
-  if(document.querySelector("p") && document.querySelector("form")){
-  document.querySelector("p").remove();
-  document.querySelector("form").remove();
-}
+  if (document.querySelector("p") && document.querySelector("form")) {
+    document.querySelector("p").remove();
+    document.querySelector("form").remove();
+  }
   //create scorelist to hold recent scores
   var listOfScores = document.createElement("ol");
   listOfScores.className = "score-list";
@@ -330,17 +346,17 @@ function displayScorePage() {
   goBackBtn.classList.add("final-buttons");
   buttonContainer2.appendChild(goBackBtn);
 
-  goBackBtn.addEventListener("click", function(){
+  goBackBtn.addEventListener("click", function () {
     location.reload();
-  })
+  });
   var clearHighScores = document.createElement("button");
   clearHighScores.className = "submit-button";
   clearHighScores.classList.add("final-buttons");
   clearHighScores.textContent = "Clear high scores";
   buttonContainer2.appendChild(clearHighScores);
 
-  clearHighScores.addEventListener('click', function () {
-    localStorage.clear();
+  clearHighScores.addEventListener("click", function () {
+    localStorage.clear("users");
     listOfScores.remove();
   });
 }
@@ -361,7 +377,7 @@ function getLocalStorage(list) {
     //create list item
     var scoreListItem = document.createElement("li");
     scoreListItem.textContent =
-    storedScores[i].initials + "  score: " + storedScores[i].score;
+      storedScores[i].initials + "  score: " + storedScores[i].score;
     list.appendChild(scoreListItem);
   }
 }
@@ -380,6 +396,7 @@ ulButtonEl.addEventListener("click", (event) => {
     } else if (targetEl == "true") {
       createRightText();
     }
+
     if (questionId == 5) {
       displayFormPage();
     }
