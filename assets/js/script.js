@@ -4,19 +4,16 @@ var startQuizButtonEl = document.querySelector(".start-button");
 var submitBtnEl = document.createElement("button");
 var ulButtonEl = document.createElement("ul");
 var formContainer = document.createElement("form");
-var score = 5;
+ulButtonEl.className = "ul-btns";
+var score = 75;
 var questionId = 0;
 var listOfBtns;
-var scoreDataArray = [];
-var objectId = 0;
-ulButtonEl.className = "ul-btns";
-var TEXT;
 
 function startQuiz() {
   //get the counter element
   var displayedScoreCounter = document.getElementById("timed-score-value");
 
-  //set the counter to decrease every second. if score is 0 or last question is answered stop quiz and clear
+  //set the counter to decrease every second. if score is 0 or last question is answered stop quiz and clear interval
   var myInterval = setInterval(() => {
     if (score <= 0) {
       if (score < 0) {
@@ -32,12 +29,8 @@ function startQuiz() {
     score--;
   }, 1000);
 
-  //get the main title and add a class to align it to the left
-
-  //get the main text and align to the left
-  var mainTextEl = document.querySelector(".main-text");
-  mainTextEl.classList.add("text-left");
-  mainTextEl.remove();
+  //get the paragraph text and remove it
+  document.querySelector(".main-text").remove();
 
   //remove the start button
   startQuizButtonEl.remove();
@@ -45,15 +38,15 @@ function startQuiz() {
   //append new ul to container that will hold buttons
   buttonContainerEl.appendChild(ulButtonEl);
 
-  //call function to create four buttons and store them in a  variable array
+  //call function to create four buttons and store them in a array
   createBtns();
 }
 
 function createBtns() {
-  //create four buttons and store in array
+  //array for main quiz buttons
   var buttonArray = [];
 
-  //create four buttons and assign a class and a unique data-id
+  //create four buttons and li's and assign a class and a unique data-id and question id for refer to later
   for (var i = 0; i < 4; i++) {
     var liButtonEl = document.createElement("li");
     liButtonEl.className = "list-btns";
@@ -61,20 +54,24 @@ function createBtns() {
     questionButton.classList.add("quiz-btn");
     questionButton.setAttribute("data-id", i);
     questionButton.setAttribute("question-id", questionId);
+
+    //add button to array
     buttonArray.push(questionButton);
 
     //append buttons to ul and li
     ulButtonEl.appendChild(liButtonEl);
     liButtonEl.appendChild(questionButton);
   }
+  //send button array get text assigned text
   assignTextContent(buttonArray);
 }
 
 function assignTextContent(arrayOfButtons) {
-  // use question id to identify correct set of questions then assign correct text and give the wrong answer a data-bool of false
+  //get the title for the questions and align it to the left
   var mainTitleTextEl = document.querySelector(".main-title");
   mainTitleTextEl.classList.add("text-left");
 
+  // use question id to identify correct set of questions then assign correct text and give the wrong answer a data-bool of false and the right answer true
   if (questionId == 0) {
     mainTitleTextEl.textContent = "Commonly used data types DO not include:";
     for (i = 0; i < arrayOfButtons.length; i++) {
@@ -200,32 +197,38 @@ function assignTextContent(arrayOfButtons) {
       }
     }
   }
+  //increment question id
   questionId++;
 }
 
 function createRightText() {
+  //create div and append it to the bottom of the main container
   var rightDivEL = document.createElement("div");
   rightDivEL.className = "wrong-or-right";
   rightDivEL.textContent = "Correct!";
   mainContainerEl.appendChild(rightDivEL);
 
+  //display div for one second then remove it
   setTimeout(() => {
     rightDivEL.remove();
   }, 1000);
 }
 
 function createWrongText() {
+  //create div and append it to the bottom of the main container
   var wrongDivEL = document.createElement("div");
   wrongDivEL.className = "wrong-or-right";
   wrongDivEL.textContent = "Wrong!";
   mainContainerEl.appendChild(wrongDivEL);
 
+  //display div for one second then remove it
   setTimeout(() => {
     wrongDivEL.remove();
   }, 1000);
 }
 
 function removeElements() {
+  //set child to the last child of the ul list of buttons and continually do so untill "child" is false/doesnt exist
   var child = ulButtonEl.lastElementChild;
   while (child) {
     ulButtonEl.removeChild(child);
@@ -236,11 +239,12 @@ function removeElements() {
 function displayFormPage(id) {
   // create elements for input form and append to form container
   mainContainerEl.textContent = "";
-  //check if is false and - 12 from score
+  //check if argument is false and - 12 from score
   if (id == "false") {
     score = score - 12;
   }
 
+  //insures no negative value
   if (score < 0) {
     score = 0;
   }
@@ -316,11 +320,15 @@ function displayFormPage(id) {
 }
 
 function saveScores(data) {
-  //NOTE: setItem will overwrite local storage! follow below to add a new object to an array in local storage
+  //Note to self: setItem will overwrite local storage! took a long time to fix these one
   //get the local storage and store it in a variable
   var existingItems = JSON.parse(localStorage.getItem("users"));
   //check if its empty, if it is then create a new empty array
   if (existingItems === null) existingItems = [];
+  //sort the scores
+  existingItems.sort((a, b) => {
+    return a.score - b.score;
+  });
   //add "data" aka object data to the array
   existingItems.push(data);
   //set it in local storage
@@ -328,9 +336,10 @@ function saveScores(data) {
 }
 
 function displayScorePage() {
-  //remove elements and display correct scorePage elements
+  //remove old elements and display correct scorePage elements
   document.querySelector("header").remove();
-  document.querySelector("h2").textContent = "High Scores";
+  document.querySelector("h2").textContent = "High Scores:";
+  //if p or form tags are displayed remove them
   if (document.querySelector("p") && document.querySelector("form")) {
     document.querySelector("p").remove();
     document.querySelector("form").remove();
@@ -343,12 +352,12 @@ function displayScorePage() {
   //get local storage and display as list
   getLocalStorage(listOfScores);
 
-  //conatiner for buttons
+  //container for buttons
   var buttonContainer2 = document.createElement("div");
   buttonContainer2.className = "form-container";
   mainContainerEl.appendChild(buttonContainer2);
 
-  //create buttons
+  //create buttons and append to container
   var goBackBtn = document.createElement("button");
   goBackBtn.className = "submit-button";
   goBackBtn.textContent = "Go back";
@@ -356,15 +365,18 @@ function displayScorePage() {
   buttonContainer2.appendChild(goBackBtn);
 
   goBackBtn.addEventListener("click", function () {
+    //reload the page
     location.reload();
   });
 
+  //create button to clear high scores
   var clearHighScores = document.createElement("button");
   clearHighScores.className = "submit-button";
   clearHighScores.classList.add("final-buttons");
   clearHighScores.textContent = "Clear high scores";
   buttonContainer2.appendChild(clearHighScores);
 
+  //onclick clear localStorage and remove the highscores list from the page
   clearHighScores.addEventListener("click", function () {
     localStorage.clear("users");
     listOfScores.remove();
@@ -384,10 +396,10 @@ function getLocalStorage(list) {
 
   // loop through storedScores array
   for (var i = 0; i < storedScores.length; i++) {
-    //create list item
+    //create list item for each "dataObject" score and initials
     var scoreListItem = document.createElement("li");
     scoreListItem.textContent =
-      storedScores[i].initials + "  score: " + storedScores[i].score;
+      storedScores[i].initials + "-  Score = " + storedScores[i].score;
     list.appendChild(scoreListItem);
   }
 }
@@ -397,25 +409,38 @@ startQuizButtonEl.addEventListener("click", startQuiz);
 
 //add event listener on all four buttnons
 ulButtonEl.addEventListener("click", (event) => {
-  //get the true or false value from the target of event
+  //test to see if the event target has a class name of "quiz-btn" if true the execute the following code
   if (event.target.className == "quiz-btn") {
+    //store the event targets attribute named "data-bool" in targetEl to see if the correct answer was clicked
     var targetEl = event.target.getAttribute("data-bool");
     if (questionId == 5) {
+      //questionId == 5 would be the last question so displayFormPage is called if not true display the wrong or right text
       displayFormPage(targetEl);
     } else if (targetEl == "false") {
       createWrongText();
+      //if the wrong answer is choosen - 12 off score
       score = score - 12;
     } else if (targetEl == "true") {
       createRightText();
     }
+    //call to remove elements
     removeElements();
+    //create new buttons, this time the ids will be incremented so to distinguish them from the rest
     createBtns();
   }
 });
 
+//on click of the highscore link
 var highScoreLink = document.querySelector(".high-score-link");
 highScoreLink.addEventListener("click", function () {
-  document.querySelector("p").remove();
-  startQuizButtonEl.remove();
+  //display the score page and remove elements that are not supposed to be on the score page
   displayScorePage();
+  document.querySelector("p").remove();
+  document.querySelector(".main-title").classList.add("text-left");
+  startQuizButtonEl.remove();
+  var quizList = document.querySelector(".score-list");
+  //if the quiz element does not have any child nodes set the text content
+  if (!quizList.hasChildNodes()) {
+    quizList.textContent = "There are currently no high scores recorded";
+  }
 });

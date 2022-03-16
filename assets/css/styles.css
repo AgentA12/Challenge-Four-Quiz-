@@ -4,16 +4,24 @@
   --secondary-color: #d9a4f1;
   --font-stack: Arial Black, Arial, Verdana;
 }
+
 /* RESETS */
 body {
   margin: 0;
   border: 0;
   box-sizing: border-box;
+  background-color: #e5e5e5;
 }
+
 /* UTILITY STYLES */
 .text-left {
   text-align: left;
 }
+
+.inline-display {
+  display: inline-block;
+}
+
 /* HEADER STYLES */
 .head-container {
   display: flex;
@@ -35,6 +43,7 @@ body {
   font-size: 1.6rem;
   font-family: var(--font-stack);
 }
+
 /* MAIN STYLES */
 .main-container {
   display: flex;
@@ -75,6 +84,7 @@ body {
   padding-left: 0;
 }
 
+/* QUIZ BTNS/QUESTION STYLES */
 .quiz-btn {
   padding: 1rem;
   background-color: var(--primary-color);
@@ -109,10 +119,7 @@ body {
   display: block;
 }
 
-.inline-display {
-  display: inline-block;
-}
-
+/* FORM FOR SCORES STYLES */
 .score-input {
   width: 40%;
   margin-left: 8px;
@@ -148,14 +155,26 @@ body {
   border: 1px var(--secondary-color) solid;
 }
 
+/* HIGHSCORES LIST PAGE STYLES */
 .score-list {
-  background-color: #7d6da8;
+  background-color: #b5abd1;
+  border-radius: 5px;
   font-size: 1.8rem;
   text-align: left;
+  font-family: var(--font-stack);
+  padding-bottom: 5px;
 }
 
-.final-buttons{
+.score-list li {
+  border-bottom: 1px solid var(--primary-color);
+  margin-bottom: 0;
+  padding-left: 10px;
+  width: 60%;
+}
+
+.final-buttons {
   width: fit-content;
   display: inline-block;
   margin-left: 8px;
+  margin-top: 2vh;
 }
