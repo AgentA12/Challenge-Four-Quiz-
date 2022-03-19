@@ -5,7 +5,7 @@ var submitBtnEl = document.createElement("button");
 var ulButtonEl = document.createElement("ul");
 var formContainer = document.createElement("form");
 ulButtonEl.className = "ul-btns";
-var score = 75;
+var score = 65;
 var questionId = 0;
 var listOfBtns;
 
@@ -18,6 +18,10 @@ function startQuiz() {
     if (score <= 0) {
       if (score < 0) {
         score = 0;
+      }
+      // do not call the displayforpage if id is 6 because the form has already been displayed
+      if(questionId == 6){
+        return;
       }
       clearInterval(myInterval);
       alert("Darn, Times up!");
@@ -263,6 +267,12 @@ function displayFormPage(id) {
   finalScoreTextEl.classList.add("main-text");
   finalScoreTextEl.textContent = `Your final score was ${setScore}.`;
   mainContainerEl.appendChild(finalScoreTextEl);
+
+  //if score is zero still give the option to save score
+  if (score <= 0) {
+    finalScoreTextEl.textContent = `Your final score was ${setScore}.
+    You can still enter your score if you would like!`;
+  }
 
   //create form
   formContainer.className = "form-container";
