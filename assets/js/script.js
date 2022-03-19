@@ -19,8 +19,8 @@ function startQuiz() {
       if (score < 0) {
         score = 0;
       }
-      // do not call the displayforpage if id is 6 because the form has already been displayed
-      if(questionId == 6){
+      // do not call displayForPage if questionid is 6 because the form has already been displayed
+      if (questionId == 6) {
         return;
       }
       clearInterval(myInterval);
@@ -75,7 +75,8 @@ function assignTextContent(arrayOfButtons) {
   var mainTitleTextEl = document.querySelector(".main-title");
   mainTitleTextEl.classList.add("text-left");
 
-  // use question id to identify correct set of questions then assign correct text and give the wrong answer a data-bool of false and the right answer true
+  // use question id to identify correct set of questions then assign correct text and give the wrong answer a data-bool of false and the right answer a value of true
+  // Note: refactor this into an array of objects later
   if (questionId == 0) {
     mainTitleTextEl.textContent = "Commonly used data types DO not include:";
     for (i = 0; i < arrayOfButtons.length; i++) {
