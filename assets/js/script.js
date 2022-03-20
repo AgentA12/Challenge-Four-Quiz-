@@ -5,7 +5,7 @@ var submitBtnEl = document.createElement("button");
 var ulButtonEl = document.createElement("ul");
 var formContainer = document.createElement("form");
 ulButtonEl.className = "ul-btns";
-var score = 75;
+var score = 60;
 var questionId = 0;
 var listOfBtns;
 
